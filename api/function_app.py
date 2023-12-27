@@ -1,27 +1,34 @@
-#!/usr/bin/env python3
-
 import azure.functions as func
+import numpy as np
+import json
 import logging
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
-@app.route(route="http_trigger")
-def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
+@app.route(route="numericalintegralservice")
+def numerical_integral_service(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
-    name = req.params.get('name')
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
+    try:
+        lower = float(req.params.get('lower'))
+        upper = float(req.params.get('upper'))
+    except ValueError:
+        return func.HttpResponse("Invalid input. Please provide valid 'lower' and 'upper' parameters.", status_code=400)
 
-    if name:
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
-    else:
-        return func.HttpResponse(
-             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-             status_code=200
-        )
+    results = {}
+
+    for N in [10, 100, 1000, 10000, 100000, 1000000]:
+        results[N] = num_integ(N, lower, upper)
+
+    return func.HttpResponse(
+        body=json.dumps(results),
+        mimetype="application/json",
+        status_code=200
+    )
+
+def num_integ(N, lower, upper):
+    eps = (upper - lower) / N
+    x_values = np.linspace(lower, upper - eps, N)
+    rect_values = np.abs(np.sin(x_values)) * eps
+    result = np.sum(rect_values)
+    return result
