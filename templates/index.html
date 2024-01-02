@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numerical Integration Service</title>
+</head>
+<body>
+    <h1>Numerical Integration Service</h1>
+    <h2>Input Range:</h2>
+    <p>Lower Bound: {{ lower }}</p>
+    <p>Upper Bound: {{ upper }}</p>
+    
+    <h2>Integration Method:</h2>
+    <p>{{ integration_method }}</p>
+
+    <h2>Results:</h2>
+    <ul>
+        {% for N, result in results.items() %}
+            <li>For N = {{ N }}, Result = {{ result }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
