@@ -66,4 +66,4 @@ jobs:
         with:
           app-name: 'walsapp'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E8508C47559444C28083D6B7C9F76637 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A44F963A382B41B5B9BD10D7D605DEE5 }}
